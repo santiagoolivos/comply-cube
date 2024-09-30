@@ -24,6 +24,7 @@ export async function GET(request: Request) {
     const checks = await response.json();
     return NextResponse.json(checks);
   } catch (error) {
+    console.error("Error fetching client checks:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

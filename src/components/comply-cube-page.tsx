@@ -14,7 +14,7 @@ export default function CreateClientPage() {
         <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-6">
           <h2 className="text-xl font-semibold mb-4">Instructions:</h2>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Enter the client's personal information such as email, phone numbers, and date of joining.</li>
+            <li>Enter the client&apos;s personal information such as email, phone numbers, and date of joining.</li>
             <li>Fill out the personal details including first name, last name, date of birth, and nationality.</li>
             <li>Once all fields are filled, click the <strong>Submit</strong> button to create the client.</li>
             <li>Ensure the email and phone numbers are valid to avoid submission errors.</li>
