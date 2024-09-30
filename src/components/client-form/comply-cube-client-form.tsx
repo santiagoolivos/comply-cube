@@ -1,6 +1,8 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ClipLoader } from 'react-spinners';
 
 interface PersonDetails {
   firstName: string;
@@ -32,6 +34,8 @@ export const ClientForm = () => {
       nationality: "",
     },
   });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -55,6 +59,7 @@ export const ClientForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const clientResponse = await fetch("/api/comply-cube/client", {
@@ -146,13 +151,14 @@ export const ClientForm = () => {
 
       console.log("sessionResponse:", sessionResponse);
 
-      window.location.href = sessionData.redirectUrl;
+      router.push(sessionData.redirectUrl);
       if (!sessionResponse.ok) {
         throw new Error(`Error: ${sessionResponse.status}`);
       }
     } catch (error) {
       console.error("Error creating client:", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -259,9 +265,16 @@ export const ClientForm = () => {
 
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        disabled={loading}
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 min-w-24"
       >
-        Submit
+        {
+          loading ? (
+            <ClipLoader color={'#f8fafc'} size={15} />
+          ) : (
+            "Submit"
+          )
+        }
       </button>
     </form>
   );

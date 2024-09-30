@@ -1,7 +1,7 @@
 'use client';
-
+import { ClipLoader } from 'react-spinners';
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 interface Check {
   id: string;
   status: string;
@@ -24,8 +24,8 @@ interface CheckDetail {
 
 const SuccessPage = () => {
   const [checkDetail, setCheckDetail] = useState<CheckDetail | null>(null);
-  const [clientChecks, setClientChecks] = useState<Check[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const recipientId = searchParams.get('recipient_id');
@@ -68,15 +68,16 @@ const SuccessPage = () => {
               ceremonyData: {
                 authentication: {
                   type: "custom",
-                  provider: "acme",
+                  provider: "ComplyCube",
                   data: {
                     checkId: checkDetailData.id,
                     type: checkDetailData.type,
-                    facialSimilarityScore: `${checkDetailData.result.breakdown.faceAnalysis.breakdown.facialSimilarityScore}`,
-                    livenessCheckScore: `${checkDetailData.result.breakdown.authenticityAnalysis.breakdown.livenessCheckScore}`,
+                    status: checkDetailData.status,
+                    facialSimilarity: `${checkDetailData.result.breakdown.faceAnalysis.facialSimilarity}`,
+                    livenessCheck: `${checkDetailData.result.breakdown.authenticityAnalysis.livenessCheck}`,
                   },
                 },
-                redirect_url: `http://localhost:3004/`,
+                redirect_url: `http://localhost:3004/success/complete-flow`,
                 embeddable_in: ['http://localhost:3004/success'],
               }
           }),
@@ -89,8 +90,8 @@ const SuccessPage = () => {
         console.log("Session created successfully:", ceremonyData);
 
         console.log("createdCeremonyResponse:", createdCeremonyResponse);
-
-        window.location.href = ceremonyData.url;
+        setLoading(false);
+        router.push(ceremonyData.url);
       } catch (error) {
         console.error("Error fetching client checks:", error);
       }
@@ -100,28 +101,14 @@ const SuccessPage = () => {
   }, [client_id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex container mx-auto py-10 items-center justify-center min-h-screen">
+        <ClipLoader size={40} />
+      </div>
+    );
   }
 
-  return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-4">Client Checks</h1>
-      {clientChecks.length === 0 ? (
-        <p>No checks found for this client.</p>
-      ) : (
-        <ul>
-          {clientChecks.map((check) => (
-            <li key={check.id}>
-              <strong>ID:</strong> {check.id} <br />
-              <strong>Status:</strong> {check.status} <br />
-              <strong>Created At:</strong> {check.createdAt} <br />
-              <strong>Updated At:</strong> {check.updatedAt}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+  return null;
 };
 
 export default SuccessPage;
