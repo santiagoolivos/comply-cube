@@ -1,4 +1,5 @@
 // app/page.tsx (o en la ruta que prefieras dentro del App Router)
+'use client';
 import React from 'react';
 import { ClientForm } from './client-form/comply-cube-client-form';
 
