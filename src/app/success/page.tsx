@@ -2,36 +2,15 @@
 import { ClipLoader } from 'react-spinners';
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-interface Check {
-  id: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
-interface CheckDetail {
-  id: string;
-  type: string;
-  result: {
-    outcome: string;
-    breakdown: {
-      faceAnalysis: {
-        facialSimilarityScore: number;
-      };
-    };
-  };
-}
 
 const SuccessPage = () => {
-  const [checkDetail, setCheckDetail] = useState<CheckDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const searchParams = useSearchParams();
   const recipientId = searchParams.get('recipient_id');
   const client_id = searchParams.get('client_id');
-  console.log("recipientId:", recipientId);
-  console.log("client_id:", client_id);
 
   useEffect(() => {
     if (!client_id) return;
@@ -45,7 +24,7 @@ const SuccessPage = () => {
         }
 
         const checksData = await response.json();
-        console.log("Client checks:", checksData);
+        
         const firstCheck = checksData.items[0];
 
         const checkDetailResponse = await fetch(`/api/comply-cube/checks?checkId=${firstCheck.id}`);
@@ -55,8 +34,7 @@ const SuccessPage = () => {
         }
 
         const checkDetailData = await checkDetailResponse.json();
-        console.log("Check detail:", checkDetailData);
-        setCheckDetail(checkDetailData);
+        
 
         const createdCeremonyResponse = await fetch(`/api/signatureapi/ceremony/`, {
           method: "POST",
@@ -87,9 +65,9 @@ const SuccessPage = () => {
           throw new Error(`Error creating ceremony: ${createdCeremonyResponse.status}`);
         }
         const ceremonyData = await createdCeremonyResponse.json();
-        console.log("Session created successfully:", ceremonyData);
+        
 
-        console.log("createdCeremonyResponse:", createdCeremonyResponse);
+        
         setLoading(false);
         router.push(ceremonyData.url);
       } catch (error) {

@@ -69,20 +69,17 @@ export const ClientForm = () => {
         },
         body: JSON.stringify(formData),
       });
-      console.log("Request:", clientResponse);
 
       if (!clientResponse.ok) {
         throw new Error(`Error: ${clientResponse.status}`);
       }
-      console.log("clientResponse:", clientResponse);
+      
 
       if (!clientResponse.ok) {
         throw new Error(`Error: ${clientResponse.status}`);
       }
 
       const complyClient = await clientResponse.json();
-      console.log("Client created successfully:", complyClient);
-
 
       const createdEnvelope = await fetch("/api/signatureapi/envelopes", {
         method: "POST",
@@ -108,20 +105,18 @@ export const ClientForm = () => {
         }),
       });
 
-      console.log("Request:", createdEnvelope);
 
       if (!createdEnvelope.ok) {
         throw new Error(`Error: ${createdEnvelope.status}`);
       }
-      console.log("createdEnvelope:", createdEnvelope);
+      
 
       if (!createdEnvelope.ok) {
         throw new Error(`Error: ${createdEnvelope.status}`);
       }
-      console.log("Request:", createdEnvelope);
 
       const signatureApiEnvelope = await createdEnvelope.json();
-      console.log("Client created successfully:", signatureApiEnvelope);
+      
 
 
       const sessionResponse = await fetch("/api/comply-cube/session", {
@@ -141,16 +136,11 @@ export const ClientForm = () => {
           "theme": "light"
         }),
       });
-      console.log("Request:", sessionResponse);
 
       if (!sessionResponse.ok) {
         throw new Error(`Error: ${sessionResponse.status}`);
       }
       const sessionData = await sessionResponse.json();
-      console.log("Session created successfully:", sessionData);
-
-      console.log("sessionResponse:", sessionResponse);
-
       router.push(sessionData.redirectUrl);
       if (!sessionResponse.ok) {
         throw new Error(`Error: ${sessionResponse.status}`);
