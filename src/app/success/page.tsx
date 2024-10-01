@@ -3,6 +3,7 @@ import { SuccessVerificationStep } from '@/components/success/success-verificati
 import { Suspense } from 'react';
 
 
+
 const SuccessPage = () => {
 
   return (
