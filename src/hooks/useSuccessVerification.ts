@@ -61,8 +61,8 @@ export const useSuccessVerification = (props: SuccessVerificationProps) => {
                     livenessCheck: `${checkDetailData.result.breakdown.authenticityAnalysis.livenessCheck}`,
                   },
                 },
-                redirect_url: `http://localhost:3004/success/complete-flow`,
-                embeddable_in: ['http://localhost:3004/success'],
+                redirect_url: `${process.env.NEXT_PUBLIC_URL}/success/complete-flow`,
+                embeddable_in: [`${process.env.NEXT_PUBLIC_URL}/success`],
               },
             }),
           }
