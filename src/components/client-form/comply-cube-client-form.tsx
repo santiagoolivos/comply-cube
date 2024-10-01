@@ -1,37 +1,29 @@
 'use client';
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 
 interface PersonDetails {
   firstName: string;
   lastName: string;
-  dob: string;  
-  nationality: string;
+  dob: string;
 }
 
 interface FormData {
   type: string;
   email: string;
-  mobile: string;
-  telephone: string;
-  joinedDate: string;
   personDetails: PersonDetails;
 }
 
 export const ClientForm = () => {
   const [formData, setFormData] = useState<FormData>({
-    type: "person",
-    email: "",
-    mobile: "",
-    telephone: "",
-    joinedDate: "",
+    type: 'person',
+    email: '',
     personDetails: {
-      firstName: "",
-      lastName: "",
-      dob: "",
-      nationality: "",
+      firstName: '',
+      lastName: '',
+      dob: '',
     },
   });
   const [loading, setLoading] = useState(false);
@@ -62,10 +54,10 @@ export const ClientForm = () => {
     setLoading(true);
 
     try {
-      const clientResponse = await fetch("/api/comply-cube/client", {
-        method: "POST",
+      const clientResponse = await fetch('/api/comply-cube/client', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
@@ -73,7 +65,6 @@ export const ClientForm = () => {
       if (!clientResponse.ok) {
         throw new Error(`Error: ${clientResponse.status}`);
       }
-      
 
       if (!clientResponse.ok) {
         throw new Error(`Error: ${clientResponse.status}`);
@@ -81,59 +72,56 @@ export const ClientForm = () => {
 
       const complyClient = await clientResponse.json();
 
-      const createdEnvelope = await fetch("/api/signatureapi/envelopes", {
-        method: "POST",
+      const createdEnvelope = await fetch('/api/signatureapi/envelopes', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title: 'Client Onboarding',
           documents: [
             {
-              url: "https://signatureapi-test-files.s3.us-east-2.amazonaws.com/mars_cover.pdf",
+              url: 'https://signatureapi-test-files.s3.us-east-2.amazonaws.com/mars_cover.pdf',
             },
           ],
           recipients: [
             {
-              type: "signer",
-              key: "company",
-              name: formData.personDetails.firstName + ' ' + formData.personDetails.lastName,
+              type: 'signer',
+              key: 'company',
+              name:
+                formData.personDetails.firstName +
+                ' ' +
+                formData.personDetails.lastName,
               email: formData.email,
-              ceremony_creation: 'manual'
+              ceremony_creation: 'manual',
             },
           ],
         }),
       });
 
-
       if (!createdEnvelope.ok) {
         throw new Error(`Error: ${createdEnvelope.status}`);
       }
-      
 
       if (!createdEnvelope.ok) {
         throw new Error(`Error: ${createdEnvelope.status}`);
       }
 
       const signatureApiEnvelope = await createdEnvelope.json();
-      
 
-
-      const sessionResponse = await fetch("/api/comply-cube/session", {
-        method: "POST",
+      const sessionResponse = await fetch('/api/comply-cube/session', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "clientId": `${complyClient.id}`,
-          "checkTypes": [
-              "identity_check"
-          ],
-          "enableMonitoring": false,
-          "successUrl": `http://localhost:3004/success?client_id=${complyClient.id}&recipient_id=${signatureApiEnvelope.recipients[0].id}`,
-          "cancelUrl": "http://localhost:3004/cancel",
-          "language": "en",
-          "theme": "light"
+          clientId: `${complyClient.id}`,
+          checkTypes: ['identity_check'],
+          enableMonitoring: false,
+          successUrl: `http://localhost:3004/success?client_id=${complyClient.id}&recipient_id=${signatureApiEnvelope.recipients[0].id}`,
+          cancelUrl: 'http://localhost:3004/cancel',
+          language: 'en',
+          theme: 'light',
         }),
       });
 
@@ -146,7 +134,7 @@ export const ClientForm = () => {
         throw new Error(`Error: ${sessionResponse.status}`);
       }
     } catch (error) {
-      console.error("Error creating client:", error);
+      console.error('Error creating client:', error);
     }
     setLoading(false);
   };
@@ -161,46 +149,12 @@ export const ClientForm = () => {
           type="email"
           id="email"
           value={formData.email}
-          onChange={(e) => handleInputChange(e, "email")}
+          onChange={(e) => handleInputChange(e, 'email')}
           required
           className="p-2 border rounded-md"
         />
 
-        <label htmlFor="mobile" className="text-sm font-medium">
-          Mobile
-        </label>
-        <input
-          type="tel"
-          id="mobile"
-          value={formData.mobile}
-          onChange={(e) => handleInputChange(e, "mobile")}
-          required
-          className="p-2 border rounded-md"
-        />
 
-        <label htmlFor="telephone" className="text-sm font-medium">
-          Telephone
-        </label>
-        <input
-          type="tel"
-          id="telephone"
-          value={formData.telephone}
-          onChange={(e) => handleInputChange(e, "telephone")}
-          required
-          className="p-2 border rounded-md"
-        />
-
-        <label htmlFor="joinedDate" className="text-sm font-medium">
-          Joined Date
-        </label>
-        <input
-          type="date"
-          id="joinedDate"
-          value={formData.joinedDate}
-          onChange={(e) => handleInputChange(e, "joinedDate")}
-          required
-          className="p-2 border rounded-md"
-        />
       </div>
 
       <div className="flex flex-col space-y-2">
@@ -211,7 +165,7 @@ export const ClientForm = () => {
           type="text"
           id="firstName"
           value={formData.personDetails.firstName}
-          onChange={(e) => handlePersonDetailsChange(e, "firstName")}
+          onChange={(e) => handlePersonDetailsChange(e, 'firstName')}
           required
           className="p-2 border rounded-md"
         />
@@ -223,7 +177,7 @@ export const ClientForm = () => {
           type="text"
           id="lastName"
           value={formData.personDetails.lastName}
-          onChange={(e) => handlePersonDetailsChange(e, "lastName")}
+          onChange={(e) => handlePersonDetailsChange(e, 'lastName')}
           required
           className="p-2 border rounded-md"
         />
@@ -235,19 +189,7 @@ export const ClientForm = () => {
           type="date"
           id="dob"
           value={formData.personDetails.dob}
-          onChange={(e) => handlePersonDetailsChange(e, "dob")}
-          required
-          className="p-2 border rounded-md"
-        />
-
-        <label htmlFor="nationality" className="text-sm font-medium">
-          Nationality
-        </label>
-        <input
-          type="text"
-          id="nationality"
-          value={formData.personDetails.nationality}
-          onChange={(e) => handlePersonDetailsChange(e, "nationality")}
+          onChange={(e) => handlePersonDetailsChange(e, 'dob')}
           required
           className="p-2 border rounded-md"
         />
@@ -258,13 +200,7 @@ export const ClientForm = () => {
         disabled={loading}
         className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 min-w-24"
       >
-        {
-          loading ? (
-            <ClipLoader color={'#f8fafc'} size={15} />
-          ) : (
-            "Submit"
-          )
-        }
+        {loading ? <ClipLoader color={'#f8fafc'} size={15} /> : 'Submit'}
       </button>
     </form>
   );

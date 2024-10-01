@@ -1,6 +1,6 @@
 'use client';
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface SuccessVerificationProps {
   setLoading: (loading: boolean) => void;
@@ -25,29 +25,34 @@ export const useSuccessVerification = (props: SuccessVerificationProps) => {
         }
 
         const checksData = await response.json();
-        
+
         const firstCheck = checksData.items[0];
 
-        const checkDetailResponse = await fetch(`/api/comply-cube/checks/${firstCheck.id}`);
+        const checkDetailResponse = await fetch(
+          `/api/comply-cube/checks/${firstCheck.id}`
+        );
 
         if (!checkDetailResponse.ok) {
-          throw new Error(`Error fetching check details: ${checkDetailResponse.status}`);
+          throw new Error(
+            `Error fetching check details: ${checkDetailResponse.status}`
+          );
         }
 
         const checkDetailData = await checkDetailResponse.json();
-        
 
-        const createdCeremonyResponse = await fetch(`/api/signatureapi/ceremony/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        const createdCeremonyResponse = await fetch(
+          `/api/signatureapi/ceremony/`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
               recipientId: recipientId,
               ceremonyData: {
                 authentication: {
-                  type: "custom",
-                  provider: "ComplyCube",
+                  type: 'custom',
+                  provider: 'ComplyCube',
                   data: {
                     checkId: checkDetailData.id,
                     type: checkDetailData.type,
@@ -58,26 +63,25 @@ export const useSuccessVerification = (props: SuccessVerificationProps) => {
                 },
                 redirect_url: `http://localhost:3004/success/complete-flow`,
                 embeddable_in: ['http://localhost:3004/success'],
-              }
-          }),
-        });
+              },
+            }),
+          }
+        );
 
         if (!createdCeremonyResponse.ok) {
-          throw new Error(`Error creating ceremony: ${createdCeremonyResponse.status}`);
+          throw new Error(
+            `Error creating ceremony: ${createdCeremonyResponse.status}`
+          );
         }
         const ceremonyData = await createdCeremonyResponse.json();
-        
 
-        
         props.setLoading(false);
         router.push(ceremonyData.url);
       } catch (error) {
-        console.error("Error fetching client checks:", error);
+        console.error('Error fetching client checks:', error);
       }
     };
 
     fetchClientChecks();
   }, [client_id]);
 };
-
-

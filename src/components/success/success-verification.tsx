@@ -1,5 +1,5 @@
 import { ClipLoader } from 'react-spinners';
-import { useState } from "react";
+import { useState } from 'react';
 import { useSuccessVerification } from '@/hooks/useSuccessVerification';
 
 export const SuccessVerificationStep = () => {
@@ -16,4 +16,3 @@ export const SuccessVerificationStep = () => {
 
   return null;
 };
-
