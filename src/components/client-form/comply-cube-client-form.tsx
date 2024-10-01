@@ -140,7 +140,7 @@ export const ClientForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 text-sm">
       <div className="flex flex-col space-y-2">
         <label htmlFor="email" className="text-sm font-medium">
           Email
@@ -153,8 +153,6 @@ export const ClientForm = () => {
           required
           className="p-2 border rounded-md"
         />
-
-
       </div>
 
       <div className="flex flex-col space-y-2">
