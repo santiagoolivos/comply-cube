@@ -1,16 +1,16 @@
-// app/api/clients/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse, } from 'next/server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const checkId = searchParams.get("checkId");
 
-  if (!checkId) {
-    return NextResponse.json({ error: "checkId is required" }, { status: 400 });
+export async function GET(request: Request, { params }: { params: { client_id: string } }) {
+
+  const clientId = params.client_id
+  
+  if (!clientId) {
+    return NextResponse.json({ error: "clientId is required" }, { status: 400 });
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_COMPLY_CUBE_API_URL}/checks/${checkId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_COMPLY_CUBE_API_URL}/checks?clientId=${clientId}`, {
       method: "GET",
       headers: {
         Authorization: `${process.env.NEXT_PUBLIC_COMPLY_CUBE_API_KEY}`,

@@ -18,7 +18,7 @@ export const useSuccessVerification = (props: SuccessVerificationProps) => {
 
     const fetchClientChecks = async () => {
       try {
-        const response = await fetch(`/api/comply-cube/client?clientId=${client_id}`);
+        const response = await fetch(`/api/comply-cube/client/${client_id}`);
 
         if (!response.ok) {
           throw new Error(`Error fetching client checks: ${response.status}`);
@@ -28,7 +28,7 @@ export const useSuccessVerification = (props: SuccessVerificationProps) => {
         
         const firstCheck = checksData.items[0];
 
-        const checkDetailResponse = await fetch(`/api/comply-cube/checks?checkId=${firstCheck.id}`);
+        const checkDetailResponse = await fetch(`/api/comply-cube/checks/${firstCheck.id}`);
 
         if (!checkDetailResponse.ok) {
           throw new Error(`Error fetching check details: ${checkDetailResponse.status}`);
