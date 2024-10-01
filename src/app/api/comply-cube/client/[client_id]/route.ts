@@ -1,10 +1,18 @@
 import { NextResponse, } from 'next/server';
 
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+
+  return []
+}
+
+ 
 
 export async function GET(request: Request, { params }: { params: { client_id: string } }) {
 
   const clientId = params.client_id
-  
+
   if (!clientId) {
     return NextResponse.json({ error: "clientId is required" }, { status: 400 });
   }
