@@ -26,31 +26,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const clientId = searchParams.get("clientId");
-
-  if (!clientId) {
-    return NextResponse.json({ error: "clientId is required" }, { status: 400 });
-  }
-
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_COMPLY_CUBE_API_URL}/checks?clientId=${clientId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `${process.env.NEXT_PUBLIC_COMPLY_CUBE_API_KEY}`,
-      },
-    });
-
-    if (!response.ok) {
-      return NextResponse.json({ error: "Error fetching client checks" }, { status: response.status });
-    }
-
-    const checks = await response.json();
-    return NextResponse.json(checks);
-  } catch (error) {
-    console.error("Error fetching client checks:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}

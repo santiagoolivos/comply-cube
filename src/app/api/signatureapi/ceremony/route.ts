@@ -17,17 +17,10 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify(ceremonyData),
     });
-    console.log("Response:", response);
     const data = await response.json();
-    console.log("Data:", data);
-
     if (!response.ok) {
       return NextResponse.json({ error: "Error creating ceremony" }, { status: response.status });
     }
-
-    // const data = await response.json();
-    console.log("Ceremony created successfully:", data);
-
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("Error creating ceremony:", error);
