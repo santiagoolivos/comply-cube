@@ -1,5 +1,12 @@
-// app/api/clients/route.ts
 import { NextResponse } from 'next/server';
+
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+
+  return []
+}
+
 
 export async function GET(request: Request, { params }: { params: { check_id: string } }) {
   const checkId = params.check_id;
